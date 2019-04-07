@@ -8890,7 +8890,52 @@ space_to_depth
 
 
 
-.. _cn_api_fluid_layers_split:
+.. _cn_api_fluid_layers_spectral_norm:
+
+spectral_norm
+-------------------------------
+
+.. py:function:: paddle.fluid.layers.spectral_norm(weight, dim=0, power_iters=1, eps=1e-12, name=None)
+
+谱归一化层（Spectral Normalization Layer）
+
+该层计算fc、conv1d、conv2d、conv3d层权重参数的谱归一化值，要求参数依次为二维、三维、四维和五维。计算过程如下所示。
+
+步骤一：以[H]的形式生成向量U，以[W]的形式生成向量V。H是输入权重的``dim`` th维度，W是剩余维度的乘积。
+
+步骤二： ``power_iters``为正整数，为得到``power_iters``迭代次数，对U和V执行如下计算操作。
+
+步骤三：计算σ(W)并归一化权重。
+
+请参考` Spectral Normalization < https://arxiv.org/abs/1802.05957 >`_
+
+参数：
+    - **weight** (Variable) - spectral_norm算子的输入权张量，可以是二维、三维、四维、五维张量，同时也是fc、conv1d、conv2d、conv3d层的权重。
+    - **dim** (int) - 在将输入（权重）重构为矩阵前排列到第一位的维度索引，输入（权重）是fc层的权重时置为0，conv层的权重时置为1，默认值为0。
+    - **power_iters** (int) - 用于计算谱范数的幂迭代次数，默认值为1。
+    - **eps** (float) - 为范式计算中的数值稳定性而添加epsilon。
+    - **name** (str) - 该层名称（可选）。
+
+返回：谱归一化后权重参数的张量变量。
+
+返回类型：变量（Variable）
+
+**代码示例**：
+
+.. code-block:: python
+
+    >>> weight = fluid.layers.data(name='weight', shape=[8, 32, 32],
+    >>>                          dtype='float32')
+    >>> x = fluid.layers.spectral_norm(weight=data, dim=1, power_iters=2).. _cn_api_fluid_layers_split:
+
+
+
+
+
+
+
+
+
 
 split
 -------------------------------
